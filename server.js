@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'web')));
 
 // Endpoints
 app.use('/Nurimg', imgbbRouter);
-app.use('/Removebg', removebgRouter);
+//app.use('/Removebg', removebgRouter);
 
 // Home route
 app.get('/', (req, res) => {
