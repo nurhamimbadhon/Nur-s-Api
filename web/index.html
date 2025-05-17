@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nur's APIs</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 18px;
+        }
+        
+        .api-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .api-box h2 {
+            color: #4a5568;
+            margin-top: 0;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .endpoint-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .endpoint {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #4299e1;
+        }
+        
+        .endpoint:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.15);
+        }
+        
+        .endpoint h3 {
+            margin-top: 0;
+            color: #2b6cb0;
+            font-size: 20px;
+        }
+        
+        .endpoint p {
+            color: #718096;
+            margin-bottom: 15px;
+        }
+        
+        .try-form {
+            margin-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        
+        .try-form input[type="file"] {
+            display: block;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .btn {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #3182ce;
+        }
+        
+        .result {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result pre {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #a0aec0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Nur's APIs</h1>
+            <p>Simple API services</p>
+        </div>
+        
+        <div class="api-box">
+            <h2>API Endpoints</h2>
+            
+            <ul class="endpoint-list">
+                <li class="endpoint">
+                    <h3>/Nurimg</h3>
+                    <p>Upload images to ImgBB and get direct links</p>
+                    
+                    <div class="try-form">
+                        <h4>Try Demo:</h4>
+                        <form id="imgbb-form" enctype="multipart/form-data">
+                            <input type="file" name="image" accept="image/*" required>
+                            <button type="submit" class="btn">Upload to ImgBB</button>
+                        </form>
+                        <div id="imgbb-result" class="result">
+                            <h4>Result:</h4>
+                            <pre id="imgbb-response"></pre>
+                        </div>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>Nur's APIs © 2025 | Built with Node.js and Express</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imgbb-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = new FormData(this);
+            const resultDiv = document.getElementById('imgbb-result');
+            const responseElement = document.getElementById('imgbb-response');
+            
+            responseElement.textContent = 'Uploading...';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/Nurimg', {
+                    method: 'POST',
+                    body: form
+                });
+                
+                const data = await response.json();
+                responseElement.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseElement.textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
