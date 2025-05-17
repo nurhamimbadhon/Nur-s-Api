@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'Nur web')));
+app.use(express.static(path.join(__dirname, 'web')));
 
 // Import routes 
 const imgbbApi = require('./api/imgbb');
