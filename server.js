@@ -1,14 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
-const multer = require('multer');
 const cors = require('cors');
-
-// Import API routes
-const imgbbRouter = require('./api/imgbb');
-const honeyRouter = require('./api/honey');
-const mediaRouter = require('./api/media');  // New media API
-//const removebgRouter = require('./api/removebg');
 
 dotenv.config();
 const app = express();
@@ -22,11 +15,15 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Serve static files from web folder
 app.use(express.static(path.join(__dirname, 'web')));
 
-// API Routes
+// Import API routes
+const imgbbRouter = require('./api/imgbb');
+const honeyRouter = require('./api/honey');
+const mediaRouter = require('./api/media');  // Media API route
+
+// Route mounting
 app.use('/Nurimg', imgbbRouter);
 app.use('/honey', honeyRouter);
-app.use('/media', mediaRouter);  // New media API route
-//app.use('/Removebg', removebgRouter);
+app.use('/api/media', mediaRouter); // Corrected route with /api prefix
 
 // Home route
 app.get('/', (req, res) => {
@@ -54,9 +51,8 @@ app.get('/api-docs', (req, res) => {
       "/Nurimg": "Image upload to ImgBB",
       "/honey": "Chatbot API with MongoDB",
       "/api/media": "Media management API with MongoDB storage",
-      "/honey/health": "Health check for chatbot API",
-      "/honey/stats": "Statistics for chatbot API",
-      "/health": "Overall server health check"
+      "/health": "Overall server health check",
+      "/api-docs": "API documentation"
     },
     honey_usage: {
       chat: "/honey?text=your_message&senderID=user_id",
@@ -73,8 +69,8 @@ app.get('/api-docs', (req, res) => {
       get_all: "GET /api/media - Get all media",
       add_media: "POST /api/media - Add new media {url, name, type}",
       remove_media: "DELETE /api/media - Remove media {url}",
-      search_media: "GET /api/media/search/{name} - Search media by name",
-      random_media: "GET /api/media/random/{userId} - Get random media with usage tracking"
+      search_media: "GET /api/media/search/:name - Search media by name",
+      random_media: "GET /api/media/random/:userId - Get random media (non-repeat)"
     },
     imgbb_usage: {
       upload: "POST /Nurimg/upload - Upload image to ImgBB {url OR image, name?}",
@@ -100,10 +96,10 @@ app.use('*', (req, res) => {
     error: 'Route not found',
     success: false,
     available_routes: [
-      '/Nurimg', 
-      '/honey', 
-      '/api/media', 
-      '/api-docs', 
+      '/Nurimg',
+      '/honey',
+      '/api/media',
+      '/api-docs',
       '/health'
     ]
   });
